@@ -3,16 +3,16 @@ services:
  - docker
 
 before_install:
- - docker build -t mkerimbay/django-react-frontend ./frontend
-	
+ - docker build -t mkerimbay/django-react-frontend -f ./frontend/Dockerfile ./frontend
+
 script:
  - docker run -e CI=true mkerimbay/django-react-frontend npm test -- --coverage
-	
+
 after_success:
  - docker build -t mkerimbay/django-react-frontend ./frontend
  - docker build -t mkerimbay/django-react-backend ./backend
-# Push images to my Docker-hub account
+# Log in to Docker CLI
  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+# Push images to my Docker hub
  - docker push mkerimbay/django-react-frontend
  - docker push mkerimbay/django-react-backend
-	
